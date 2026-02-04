@@ -164,10 +164,10 @@ More coming. Architecture supports any Solana program.
 ## Quick Start
 
 ### Option 1: Chat (Easiest)
-Go to [tada.dev](https://tada.dev) and describe what you want.
+Go to [tada.build](https://tada.build) and describe what you want.
 
 ### Option 2: Dashboard
-Create and manage pipelines visually at [tada.dev/dashboard](https://tada.dev/dashboard).
+Create and manage pipelines visually at [tada.build/dashboard](https://tada.build/dashboard).
 
 ### Option 3: SDK
 ```bash
