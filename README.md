@@ -205,14 +205,15 @@ Add Tada MCP server to Claude Code or Cursor, then just ask for what you want.
 ```
 tada/
 ├── apps/
-│   ├── api/              # Backend API (Fastify)
+│   ├── ingestion/        # Helius Laserstream → parsed events
+│   ├── pipeline/         # User filters & transforms
+│   ├── delivery/         # Fan-out to destinations
+│   ├── api/              # REST API (Fastify)
 │   ├── web/              # Dashboard + AI Chat (Next.js)
 │   └── mcp/              # MCP server for AI agents
 ├── packages/
-│   ├── sdk/              # TypeScript SDK (@tada/sdk)
-│   ├── shared/           # Shared types
-│   └── destinations/     # Destination adapters
-└── ARCHITECTURE.md       # System design (start here)
+│   └── shared/           # Shared types & IDLs
+└── ARCHITECTURE.md       # System design
 ```
 
 ---
@@ -228,24 +229,16 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for system design, pipeline schema, and
 - **Runtime**: Node.js (TypeScript)
 - **API**: Fastify
 - **Web**: Next.js
-- **Database**: Postgres (Supabase)
-- **Cache**: Redis
+- **Database**: Supabase (Postgres)
 - **Solana Data**: Helius Laserstream (gRPC)
 - **WebSockets**: Ably
-- **Code Sandbox**: isolated-vm
-- **Hosting**: Vercel (web) + Railway (API)
+- **Hosting**: Vercel (web) + AWS EC2 (services)
 
 ---
 
 ## Status
 
 🚧 In development. Building fast.
-
----
-
-## Contributing
-
-Check [CHANGELOG.md](./CHANGELOG.md) for context on decisions made.
 
 ---
 
