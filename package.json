@@ -1,0 +1,21 @@
+{
+  "name": "tada",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Real-time Solana data to your frontend in minutes",
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:ingestion": "npm run dev --workspace=apps/ingestion",
+    "build": "npm run build --workspaces --if-present",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
