@@ -212,24 +212,14 @@ tada/
 │   ├── sdk/              # TypeScript SDK (@tada/sdk)
 │   ├── shared/           # Shared types
 │   └── destinations/     # Destination adapters
-├── ARCHITECTURE.md       # System design (start here)
-├── DEPLOYMENT.md         # Deployment configs & logs  
-├── CHANGELOG.md          # All changes & decisions
-├── SPEC.md               # Product requirements
-└── CLAUDE.md             # AI coding guidelines
+└── ARCHITECTURE.md       # System design (start here)
 ```
 
 ---
 
 ## Documentation
 
-| Doc | What's In It |
-|-----|-------------|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | System design, pipeline schema, API reference |
-| [DEPLOYMENT.md](./DEPLOYMENT.md) | Service URLs, configs, deployment process |
-| [CHANGELOG.md](./CHANGELOG.md) | All changes, findings, issues, decisions |
-| [SPEC.md](./SPEC.md) | Product requirements, milestones |
-| [.claude/CLAUDE.md](./.claude/CLAUDE.md) | AI coding guidelines |
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for system design, pipeline schema, and API reference.
 
 ---
 
