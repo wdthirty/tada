@@ -16,7 +16,7 @@ import { initPipelineEngine, registerPipeline } from './pipeline-sync.js';
 
 const PORT = process.env.PORT || 4000;
 
-const app = express();
+export const app = express();
 
 // Middleware
 app.use(cors());
