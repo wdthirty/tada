@@ -18,6 +18,8 @@ export default function PipelineDetailPage({ params }: { params: Promise<{ id: s
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState('');
+  const [confirmModal, setConfirmModal] = useState<{ action: 'pause' | 'delete' } | null>(null);
+  const [confirmText, setConfirmText] = useState('');
 
   useEffect(() => {
     loadPipeline();
@@ -51,23 +53,41 @@ export default function PipelineDetailPage({ params }: { params: Promise<{ id: s
 
   const handleToggleStatus = async () => {
     if (!pipeline) return;
+    if (pipeline.status === 'active') {
+      // Require confirmation to pause
+      setConfirmModal({ action: 'pause' });
+      setConfirmText('');
+      return;
+    }
+    // Resume doesn't need confirmation
     try {
-      const updated = pipeline.status === 'active'
-        ? await pausePipeline(id)
-        : await resumePipeline(id);
+      const updated = await resumePipeline(id);
       setPipeline(updated);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update pipeline');
+      setError(err instanceof Error ? err.message : 'Failed to resume pipeline');
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this pipeline?')) return;
+    setConfirmModal({ action: 'delete' });
+    setConfirmText('');
+  };
+
+  const handleConfirmAction = async () => {
+    if (!confirmModal || confirmText !== 'yes i do') return;
+
     try {
-      await deletePipeline(id);
-      router.push('/pipelines');
+      if (confirmModal.action === 'pause') {
+        const updated = await pausePipeline(id);
+        setPipeline(updated);
+      } else {
+        await deletePipeline(id);
+        router.push('/pipelines');
+      }
+      setConfirmModal(null);
+      setConfirmText('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete pipeline');
+      setError(err instanceof Error ? err.message : `Failed to ${confirmModal.action} pipeline`);
     }
   };
 
@@ -255,6 +275,51 @@ export default function PipelineDetailPage({ params }: { params: Promise<{ id: s
           </Card>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {confirmModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[var(--background)] border border-[var(--border)] rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-2">
+              {confirmModal.action === 'pause' ? 'Stop Pipeline?' : 'Delete Pipeline?'}
+            </h3>
+            <p className="text-[var(--muted)] mb-4">
+              Are you sure you want to {confirmModal.action === 'pause' ? 'stop' : 'delete'}{' '}
+              <span className="text-[var(--foreground)] font-medium">{pipeline?.name}</span>?
+              {confirmModal.action === 'delete' && ' This action cannot be undone.'}
+            </p>
+            <p className="text-sm text-[var(--muted)] mb-3">
+              Type <span className="font-mono text-[var(--foreground)]">yes i do</span> to confirm:
+            </p>
+            <input
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              placeholder="yes i do"
+              className="w-full px-3 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+              autoFocus
+            />
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setConfirmModal(null);
+                  setConfirmText('');
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleConfirmAction}
+                disabled={confirmText !== 'yes i do'}
+                className={confirmModal.action === 'delete' ? 'bg-[var(--error)] hover:bg-[var(--error)]/90' : ''}
+              >
+                {confirmModal.action === 'pause' ? 'Stop Pipeline' : 'Delete Pipeline'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

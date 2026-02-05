@@ -26,7 +26,7 @@ export function Header({ title, action }: HeaderProps) {
               clearApiKey();
               window.location.href = '/';
             }}
-            className="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+            className="text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
           >
             Sign out
           </button>

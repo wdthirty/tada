@@ -155,7 +155,7 @@ export function LiveEvents({ pipelineId, enabled }: LiveEventsProps) {
           {events.length > 0 && (
             <button
               onClick={clearEvents}
-              className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+              className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] cursor-pointer"
             >
               Clear
             </button>
@@ -163,14 +163,14 @@ export function LiveEvents({ pipelineId, enabled }: LiveEventsProps) {
           {isListening ? (
             <button
               onClick={disconnect}
-              className="px-3 py-1 text-sm bg-[var(--error)]/10 text-[var(--error)] rounded-lg hover:bg-[var(--error)]/20"
+              className="px-3 py-1 text-sm bg-[var(--error)]/10 text-[var(--error)] rounded-lg hover:bg-[var(--error)]/20 cursor-pointer"
             >
               Stop
             </button>
           ) : (
             <button
               onClick={connect}
-              className="px-3 py-1 text-sm bg-[var(--accent)] text-white rounded-lg hover:opacity-90"
+              className="px-3 py-1 text-sm bg-[var(--accent)] text-white rounded-lg hover:opacity-90 cursor-pointer"
             >
               Start Listening
             </button>

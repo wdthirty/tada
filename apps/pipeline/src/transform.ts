@@ -241,6 +241,9 @@ function getFieldValue(obj: any, path: string): any {
   return current;
 }
 
+// Initial real token reserves for pump.fun bonding curve (793.1M tokens with 6 decimals)
+const PUMP_INITIAL_REAL_TOKEN_RESERVES = 793_100_000_000_000;
+
 /**
  * Apply a pipe transformation to a value
  */
@@ -265,6 +268,14 @@ function applyPipe(value: any, pipe: TransformPipe): any {
         return `${str.slice(0, 4)}...${str.slice(-4)}`;
       }
       return str;
+
+    case 'bondingCurveProgress':
+      // Calculate bonding curve completion percentage
+      // Progress = (initial - current) / initial * 100
+      const currentReserves = toNumber(value);
+      const progress = ((PUMP_INITIAL_REAL_TOKEN_RESERVES - currentReserves) / PUMP_INITIAL_REAL_TOKEN_RESERVES) * 100;
+      // Clamp between 0 and 100, round to 2 decimal places
+      return Math.round(Math.max(0, Math.min(100, progress)) * 100) / 100;
 
     default:
       return value;

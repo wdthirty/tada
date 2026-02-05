@@ -86,11 +86,24 @@ export interface Filter {
     exclude?: string[];
   };
   conditions?: FilterCondition[];
-  
+
+  // Convenience filters (converted to conditions internally)
+  mints?: string[];          // Filter by token mint addresses
+  wallets?: string[];        // Filter by wallet addresses
+  isBuy?: boolean;           // Filter by trade direction (true=buy, false=sell)
+  solAmount?: {              // Filter by SOL amount range
+    min?: number;
+    max?: number;
+  };
+  tokenAmount?: {            // Filter by token amount range
+    min?: number;
+    max?: number;
+  };
+
   // Logical operators for complex filters
   $and?: Filter[];
   $or?: Filter[];
-  
+
   // Code escape hatch
   code?: string;
 }
@@ -100,7 +113,7 @@ export interface Filter {
 // ============================================
 
 export type TransformTemplate = 'trade' | 'transfer' | 'migration' | 'raw';
-export type TransformPipe = 'lamportsToSol' | 'base58' | 'timestamp' | 'shorten';
+export type TransformPipe = 'lamportsToSol' | 'base58' | 'timestamp' | 'shorten' | 'bondingCurveProgress';
 
 export interface TransformField {
   source: string;
