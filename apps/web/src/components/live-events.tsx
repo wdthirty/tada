@@ -14,6 +14,7 @@ interface EventMessage {
   id: string;
   timestamp: number;
   data: Record<string, unknown>;
+  isNew?: boolean;
 }
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:5001';
@@ -51,6 +52,7 @@ export function LiveEvents({ pipelineId, enabled }: LiveEventsProps) {
         id: (payload.id as string) || `${Date.now()}-${Math.random()}`,
         timestamp: (payload.timestamp as number) || Date.now(),
         data: payload,
+        isNew: true,
       };
 
       if (pausedRef.current) {
@@ -59,9 +61,18 @@ export function LiveEvents({ pipelineId, enabled }: LiveEventsProps) {
       }
 
       setEvents((prev) => {
-        const updated = [newEvent, ...prev];
+        // Mark all existing events as not new
+        const existing = prev.map(e => ({ ...e, isNew: false }));
+        const updated = [newEvent, ...existing];
         return updated.slice(0, 500);
       });
+
+      // Remove the "new" flag after animation completes
+      setTimeout(() => {
+        setEvents((prev) =>
+          prev.map(e => e.id === newEvent.id ? { ...e, isNew: false } : e)
+        );
+      }, 1000);
     });
 
     socket.on('connect_error', () => {
@@ -195,7 +206,11 @@ export function LiveEvents({ pipelineId, enabled }: LiveEventsProps) {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="bg-[var(--border)]/30 rounded-lg p-3 text-sm"
+                className={`rounded-lg p-3 text-sm transition-all duration-500 ${
+                  event.isNew
+                    ? 'bg-[var(--accent)]/20 ring-1 ring-[var(--accent)]/50'
+                    : 'bg-[var(--border)]/30'
+                }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
